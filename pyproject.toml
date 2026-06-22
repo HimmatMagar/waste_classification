@@ -7,6 +7,7 @@ requires-python = ">=3.14"
 dependencies = [
     "ensure>=1.0.4",
     "joblib>=1.5.3",
+    "notebook>=7.6.0",
     "python-box>=7.4.1",
     "pyyaml>=6.0.3",
     "setuptools>=82.0.1",
