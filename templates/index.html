@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WasteSort — Classify Your Waste</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0e1a0f;
+      --surface:   #152016;
+      --border:    #243626;
+      --organic:   #6fcf4a;
+      --recycle:   #38c4e8;
+      --text:      #e8f0e9;
+      --muted:     #7a907b;
+      --pill-org:  rgba(111,207,74,0.12);
+      --pill-rec:  rgba(56,196,232,0.12);
+      --radius:    14px;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 20px 80px;
+    }
+
+    /* ── Header ── */
+    header {
+      text-align: center;
+      margin-bottom: 52px;
+    }
+
+    .wordmark {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--organic);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .wordmark::before, .wordmark::after {
+      content: '';
+      display: block;
+      width: 28px;
+      height: 1px;
+      background: var(--organic);
+      opacity: .5;
+    }
+
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(36px, 6vw, 62px);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -.02em;
+      color: var(--text);
+    }
+
+    h1 span {
+      background: linear-gradient(120deg, var(--organic), var(--recycle));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .sub {
+      margin-top: 14px;
+      font-size: 16px;
+      color: var(--muted);
+      font-weight: 300;
+      letter-spacing: .01em;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 520px;
+      overflow: hidden;
+    }
+
+    /* ── Upload zone ── */
+    .upload-zone {
+      padding: 40px 32px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background .15s;
+      position: relative;
+    }
+
+    .upload-zone:hover { background: rgba(111,207,74,.04); }
+
+    .upload-zone.dragging {
+      background: rgba(111,207,74,.08);
+      border-color: var(--organic);
+    }
+
+    .upload-zone input[type="file"] {
+      position: absolute; inset: 0;
+      opacity: 0; cursor: pointer; width: 100%; height: 100%;
+    }
+
+    .upload-icon {
+      width: 56px; height: 56px;
+      border: 2px dashed var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 18px;
+      font-size: 22px;
+      transition: border-color .15s;
+    }
+
+    .upload-zone:hover .upload-icon { border-color: var(--organic); }
+
+    .upload-label {
+      text-align: center;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .upload-label strong {
+      display: block;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px;
+      color: var(--text);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    /* ── Preview ── */
+    #preview-wrap {
+      display: none;
+      padding: 24px 32px;
+      border-bottom: 1px solid var(--border);
+      align-items: center;
+      gap: 16px;
+    }
+
+    #preview-wrap.visible { display: flex; }
+
+    #preview-img {
+      width: 72px; height: 72px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 1px solid var(--border);
+    }
+
+    .preview-meta { flex: 1; min-width: 0; }
+
+    .preview-name {
+      font-size: 14px;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .preview-size {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .clear-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: border-color .15s, color .15s;
+      flex-shrink: 0;
+    }
+
+    .clear-btn:hover { border-color: #e05555; color: #e05555; }
+
+    /* ── API URL ── */
+    .api-row {
+      padding: 20px 32px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .api-row label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .api-row input {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'Inter', monospace;
+      font-size: 13px;
+      padding: 10px 14px;
+      width: 100%;
+      outline: none;
+      transition: border-color .15s;
+    }
+
+    .api-row input:focus { border-color: var(--organic); }
+
+    /* ── Action ── */
+    .action-row {
+      padding: 24px 32px;
+    }
+
+    .classify-btn {
+      width: 100%;
+      background: var(--organic);
+      color: #0c1a0d;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: .02em;
+      border: none;
+      border-radius: 10px;
+      padding: 15px;
+      cursor: pointer;
+      transition: opacity .15s, transform .1s;
+    }
+
+    .classify-btn:hover:not(:disabled) { opacity: .88; }
+    .classify-btn:active:not(:disabled) { transform: scale(.98); }
+    .classify-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+    /* ── Result ── */
+    #result {
+      display: none;
+      margin-top: 28px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 520px;
+      overflow: hidden;
+    }
+
+    #result.visible { display: block; }
+
+    .result-header {
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .result-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .result-badge {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 99px;
+    }
+
+    .result-badge.organic {
+      background: var(--pill-org);
+      color: var(--organic);
+      border: 1px solid rgba(111,207,74,.25);
+    }
+
+    .result-badge.recyclable {
+      background: var(--pill-rec);
+      color: var(--recycle);
+      border: 1px solid rgba(56,196,232,.25);
+    }
+
+    .result-badge.error {
+      background: rgba(224,85,85,.1);
+      color: #e05555;
+      border: 1px solid rgba(224,85,85,.2);
+    }
+
+    .result-body {
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .result-class {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .result-class.organic  { color: var(--organic); }
+    .result-class.recyclable { color: var(--recycle); }
+    .result-class.error    { color: #e05555; }
+
+    .result-desc {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* confidence bar */
+    .conf-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .conf-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .conf-label span:last-child { font-weight: 600; color: var(--text); }
+
+    .conf-track {
+      height: 6px;
+      background: var(--border);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .conf-fill {
+      height: 100%;
+      border-radius: 99px;
+      transition: width .6s cubic-bezier(.34,1.56,.64,1);
+    }
+
+    .conf-fill.organic   { background: var(--organic); }
+    .conf-fill.recyclable { background: var(--recycle); }
+
+    /* ── Loading spinner ── */
+    .spinner {
+      display: none;
+      width: 18px; height: 18px;
+      border: 2px solid rgba(12,26,13,.4);
+      border-top-color: #0c1a0d;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      margin: 0 auto;
+    }
+
+    .classify-btn.loading .btn-text { display: none; }
+    .classify-btn.loading .spinner  { display: block; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Tip pills ── */
+    .tips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 52px;
+    }
+
+    .tip {
+      font-size: 12px;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      padding: 6px 14px;
+    }
+
+    @media (max-width: 540px) {
+      body { padding: 32px 14px 60px; }
+      .upload-zone, .api-row, .action-row { padding-left: 20px; padding-right: 20px; }
+      .result-body { padding: 20px; }
+      .result-header { padding: 16px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <p class="wordmark">WasteSort</p>
+    <h1>What kind of waste<br>is <span>this?</span></h1>
+    <p class="sub">Upload an image — get an instant organic or recyclable verdict.</p>
+  </header>
+
+  <div class="card">
+
+    <!-- Upload -->
+    <div class="upload-zone" id="dropzone">
+      <input type="file" id="file-input" accept="image/*" />
+      <div class="upload-icon">🗂️</div>
+      <div class="upload-label">
+        <strong>Drop an image here</strong>
+        or click to browse your files
+      </div>
+    </div>
+
+    <!-- Preview -->
+    <div id="preview-wrap">
+      <img id="preview-img" src="" alt="preview" />
+      <div class="preview-meta">
+        <div class="preview-name" id="preview-name"></div>
+        <div class="preview-size" id="preview-size"></div>
+      </div>
+      <button class="clear-btn" id="clear-btn">Remove</button>
+    </div>
+
+    <!-- API URL -->
+    <div class="api-row">
+      <label for="api-url">FastAPI endpoint</label>
+      <input type="text" id="api-url" value="http://localhost:8000/classify" placeholder="http://localhost:8000/classify" />
+    </div>
+
+    <!-- Action -->
+    <div class="action-row">
+      <button class="classify-btn" id="classify-btn" disabled>
+        <span class="btn-text">Classify Waste</span>
+        <div class="spinner"></div>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Result -->
+  <div id="result">
+    <div class="result-header">
+      <span class="result-label">Classification Result</span>
+      <span class="result-badge" id="result-badge"></span>
+    </div>
+    <div class="result-body">
+      <div class="result-class" id="result-class"></div>
+      <div class="result-desc" id="result-desc"></div>
+      <div class="conf-row" id="conf-row" style="display:none">
+        <div class="conf-label">
+          <span>Confidence</span>
+          <span id="conf-pct"></span>
+        </div>
+        <div class="conf-track">
+          <div class="conf-fill" id="conf-fill" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tips">
+    <span class="tip">🍃 Organic — food scraps, leaves, paper</span>
+    <span class="tip">♻️ Recyclable — plastic, glass, metal, cardboard</span>
+  </div>
+
+  <script>
+    const fileInput   = document.getElementById('file-input');
+    const dropzone    = document.getElementById('dropzone');
+    const previewWrap = document.getElementById('preview-wrap');
+    const previewImg  = document.getElementById('preview-img');
+    const previewName = document.getElementById('preview-name');
+    const previewSize = document.getElementById('preview-size');
+    const clearBtn    = document.getElementById('clear-btn');
+    const classifyBtn = document.getElementById('classify-btn');
+    const apiUrlInput = document.getElementById('api-url');
+    const resultBox   = document.getElementById('result');
+
+    let selectedFile = null;
+
+    // ── File selection ──────────────────────────────────────
+    fileInput.addEventListener('change', () => handleFile(fileInput.files[0]));
+
+    dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('dragging'); });
+    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragging'));
+    dropzone.addEventListener('drop', e => {
+      e.preventDefault();
+      dropzone.classList.remove('dragging');
+      if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+    });
+
+    function handleFile(file) {
+      if (!file || !file.type.startsWith('image/')) return;
+      selectedFile = file;
+
+      const reader = new FileReader();
+      reader.onload = e => { previewImg.src = e.target.result; };
+      reader.readAsDataURL(file);
+
+      previewName.textContent = file.name;
+      previewSize.textContent = (file.size / 1024).toFixed(1) + ' KB';
+
+      previewWrap.classList.add('visible');
+      classifyBtn.disabled = false;
+      hideResult();
+    }
+
+    clearBtn.addEventListener('click', () => {
+      selectedFile = null;
+      fileInput.value = '';
+      previewWrap.classList.remove('visible');
+      classifyBtn.disabled = true;
+      hideResult();
+    });
+
+    // ── Classify ────────────────────────────────────────────
+    classifyBtn.addEventListener('click', async () => {
+      if (!selectedFile) return;
+
+      const url = apiUrlInput.value.trim();
+      if (!url) { alert('Please enter your FastAPI endpoint URL.'); return; }
+
+      setLoading(true);
+      hideResult();
+
+      try {
+        const formData = new FormData();
+        formData.append('file', selectedFile);           // adjust key if your API uses a different field name
+
+        const response = await fetch(url, {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          const errText = await response.text();
+          throw new Error(`Server returned ${response.status}: ${errText}`);
+        }
+
+        const data = await response.json();
+
+        /*
+          Expected response shape (adapt to your API):
+          {
+            "class": "Organic" | "Recyclable",   // or "prediction", "label", etc.
+            "confidence": 0.92                   // optional float 0–1
+          }
+        */
+        showResult(data);
+
+      } catch (err) {
+        showError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    // ── UI helpers ──────────────────────────────────────────
+    function setLoading(on) {
+      classifyBtn.classList.toggle('loading', on);
+      classifyBtn.disabled = on;
+    }
+
+    function hideResult() {
+      resultBox.classList.remove('visible');
+    }
+
+    function showResult(data) {
+      /*  Try common field names your FastAPI might return  */
+      const raw = data.class ?? data.prediction ?? data.label ?? data.category ?? '';
+      const confidence = data.confidence ?? data.score ?? data.probability ?? null;
+
+      const isOrganic    = /organic/i.test(raw);
+      const isRecyclable = /recycl/i.test(raw);
+      const type = isOrganic ? 'organic' : isRecyclable ? 'recyclable' : 'unknown';
+
+      const badge    = document.getElementById('result-badge');
+      const cls      = document.getElementById('result-class');
+      const desc     = document.getElementById('result-desc');
+      const confRow  = document.getElementById('conf-row');
+      const confFill = document.getElementById('conf-fill');
+      const confPct  = document.getElementById('conf-pct');
+
+      badge.className = 'result-badge ' + type;
+      cls.className   = 'result-class '  + type;
+
+      if (type === 'organic') {
+        badge.textContent = '🍃 Organic';
+        cls.textContent   = 'Organic Waste';
+        desc.textContent  = 'This item is compostable. Dispose of it in the organic / green bin so it can break down naturally and enrich soil.';
+      } else if (type === 'recyclable') {
+        badge.textContent = '♻️ Recyclable';
+        cls.textContent   = 'Recyclable Waste';
+        desc.textContent  = 'This item can be recycled. Rinse it if necessary and place it in the recycling bin to give it a second life.';
+      } else {
+        badge.textContent = raw || 'Unknown';
+        cls.textContent   = raw || 'Unknown';
+        desc.textContent  = 'The model returned an unrecognised class. Check that your API response includes a "class" field with "Organic" or "Recyclable".';
+      }
+
+      if (confidence !== null) {
+        const pct = Math.round(confidence * 100);
+        confPct.textContent = pct + '%';
+        confFill.className  = 'conf-fill ' + type;
+        confRow.style.display = '';
+        // Trigger animation after paint
+        requestAnimationFrame(() => { confFill.style.width = pct + '%'; });
+      } else {
+        confRow.style.display = 'none';
+      }
+
+      resultBox.classList.add('visible');
+    }
+
+    function showError(msg) {
+      const badge    = document.getElementById('result-badge');
+      const cls      = document.getElementById('result-class');
+      const desc     = document.getElementById('result-desc');
+      const confRow  = document.getElementById('conf-row');
+
+      badge.className = 'result-badge error';
+      badge.textContent = '⚠ Error';
+      cls.className   = 'result-class error';
+      cls.textContent = 'Request failed';
+      desc.textContent = msg;
+      confRow.style.display = 'none';
+
+      resultBox.classList.add('visible');
+    }
+  </script>
+</body>
+</html>
