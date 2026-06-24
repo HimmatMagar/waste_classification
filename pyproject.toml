@@ -1,7 +1,7 @@
 [project]
 name = "wasteClassification"
 version = "0.1.0"
-description = "Add your description here"
+description = "End to End Deep Learning(CNN) implementation to classify the waste wheather it is Orginal or Recyclable"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
