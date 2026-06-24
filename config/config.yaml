@@ -11,3 +11,9 @@ model_building:
   root_dir: artifact/model
   train_data_file: artifact/data_ingestion/DATASET/TRAIN
   model: model.pth
+
+model_evaluation:
+  root_dir: artifact/model_eval
+  test_data_file: artifact/data_ingestion/DATASET/TEST
+  model: artifact/model/model.pth
+  metrices: artifact/model_eval/metric.json
