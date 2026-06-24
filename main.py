@@ -1,9 +1,12 @@
-from wasteClassification import logger
+from src.wasteClassification import logger
+from src.wasteClassification.pipeline.data_ingestion_pipeline import DataIngestionPipeline
 
-def main():
-    logger.info("Hello from waste classification")
-    print("Hello from waste-classification!")
-
-
-if __name__ == "__main__":
-    main()
+STAGE_NAME = "Data Ingestion Stage"
+try:
+      logger.info(f">>>>>> {STAGE_NAME} started <<<<<<")
+      obj = DataIngestionPipeline()
+      obj.main()
+      logger.info(f">>>>>> {STAGE_NAME} completed <<<<<<")
+except Exception as e:
+      logger.exception(e)
+      raise e

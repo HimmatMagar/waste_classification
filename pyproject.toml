@@ -1,11 +1,12 @@
 [project]
-name = "waste-classification"
+name = "wasteClassification"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
     "ensure>=1.0.4",
+    "gdown>=6.1.0",
     "joblib>=1.5.3",
     "notebook>=7.6.0",
     "numpy>=2.5.0",
