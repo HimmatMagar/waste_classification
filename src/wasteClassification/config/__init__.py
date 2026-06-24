@@ -23,3 +23,13 @@ class ConfigManager:
             zip_file=config.zip_file,
             unzip_file=config.unzip_file
         )
+    
+    def getModelBuildingConfig(self) -> ModelBuildingConfig:
+            config = self.config.model_building
+            create_dir([config.root_dir])
+
+            return ModelBuildingConfig(
+                  root_dir = config.root_dir,
+                  train_data_file = config.train_data_file,
+                  model = config.model
+            )
