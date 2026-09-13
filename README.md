@@ -122,25 +122,25 @@ This will execute the model evaluation pipeline by default. To enable other stag
 ```python
 # Uncomment these blocks in main.py to run:
 
-# STAGE_NAME = "Data Ingestion Stage"
-# try:
-#       logger.info(f">>>>>> {STAGE_NAME} started <<<<<<")
-#       obj = DataIngestionPipeline()
-#       obj.main()
-#       logger.info(f">>>>>> {STAGE_NAME} completed <<<<<<")
-# except Exception as e:
-#       logger.exception(e)
-#       raise e
+STAGE_NAME = "Data Ingestion Stage"
+try:
+  logger.info(f">>>>>> {STAGE_NAME} started <<<<<<")
+  obj = DataIngestionPipeline()
+  obj.main()
+  logger.info(f">>>>>> {STAGE_NAME} completed <<<<<<")
+except Exception as e:
+  logger.exception(e)
+  raise e
 
-# stage_name = "Model Training Stage"
-# try:
-#       logger.info(f">>>>>> {stage_name} started <<<<<<")
-#       obj = ModelTrainingPipeline()
-#       obj.Train_Model()
-#       logger.info(f">>>>>> {stage_name} completed <<<<<<")
-# except Exception as e:
-#       logger.exception(e)
-#       raise e
+stage_name = "Model Training Stage"
+try:
+  logger.info(f">>>>>> {stage_name} started <<<<<<")
+  obj = ModelTrainingPipeline()
+  obj.Train_Model()
+  logger.info(f">>>>>> {stage_name} completed <<<<<<")
+except Exception as e:
+  logger.exception(e)
+  raise e
 ```
 
 ### Option 2: Run Individual Stages
