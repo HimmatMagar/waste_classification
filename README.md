@@ -120,7 +120,6 @@ python main.py
 This will execute the model evaluation pipeline by default. To enable other stages, uncomment the relevant sections in `main.py`:
 
 ```python
-# Uncomment these blocks in main.py to run:
 
 STAGE_NAME = "Data Ingestion Stage"
 try:
