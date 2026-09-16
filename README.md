@@ -56,17 +56,14 @@ uv pip install -e .
 
 #### Option B: Using `pip` with Virtual Environment
 ```bash
-# Create a virtual environment
-python -m venv venv
+# Create a virtual environment and install dependencies
+uv sync
 
 # Activate virtual environment
 # On macOS/Linux:
 source venv/bin/activate
 # On Windows:
 venv\Scripts\activate
-
-# Install dependencies
-pip install -e .
 ```
 
 ### 3. Verify Installation
