@@ -17,23 +17,6 @@ This project implements a complete machine learning pipeline for waste classific
 
 ---
 
-## 📋 Prerequisites
-
-Before starting, ensure you have the following installed:
-
-- **Python 3.14+** (as specified in `pyproject.toml`)
-- **pip** or **uv** (for dependency management)
-- **Git** (for cloning the repository)
-- **Disk Space** - At least 5GB for datasets and model files
-
-### System Requirements
-
-- **CPU**: Dual-core processor minimum
-- **RAM**: 8GB minimum (16GB recommended)
-- **GPU** (Optional): CUDA-capable GPU for faster training (NVIDIA recommended)
-
----
-
 ## 🚀 Getting Started
 
 ### 1. Clone the Repository
