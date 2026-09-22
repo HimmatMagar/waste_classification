@@ -4,20 +4,20 @@ End-to-End Deep Learning implementation for waste classification to predict whet
 
 ---
 
-## 🎯 Project Overview
+## Project Overview
 
 This project implements a complete machine learning pipeline for waste classification, from data ingestion to model training and evaluation. It leverages transfer learning with popular deep learning architectures to achieve high accuracy in classifying waste into recyclable and organic categories.
 
 **Key Features:**
-- 📥 **Data Ingestion Pipeline** - Automated dataset downloading and preparation
-- 🧠 **Model Training Pipeline** - Transfer learning with PyTorch and torchvision
-- 📊 **Model Evaluation Pipeline** - Comprehensive model evaluation metrics
-- 📝 **Modular Architecture** - Well-organized components for easy maintenance
-- 🔧 **Configuration Management** - YAML-based configuration for easy customization
+- **Data Ingestion Pipeline** - Automated dataset downloading and preparation
+- **Model Training Pipeline** - Transfer learning with PyTorch and torchvision
+- **Model Evaluation Pipeline** - Comprehensive model evaluation metrics
+- **Modular Architecture** - Well-organized components for easy maintenance
+- **Configuration Management** - YAML-based configuration for easy customization
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. Clone the Repository
 
@@ -52,7 +52,7 @@ python -c "from src.wasteClassification import logger; print('Package installed 
 
 ---
 
-## 📦 Project Structure
+## Project Structure
 
 ```
 waste_classification/
@@ -83,7 +83,7 @@ waste_classification/
 
 ---
 
-## 🏃 Running the Project
+## Running the Project
 
 ### Option 1: Run the Complete Pipeline (Recommended)
 
@@ -150,7 +150,7 @@ jupyter notebook
 
 ---
 
-## 📚 Key Dependencies
+## Key Dependencies
 
 | Package | Purpose |
 |---------|---------|
@@ -165,7 +165,7 @@ jupyter notebook
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 Configuration files are stored in the `config/` directory using YAML format. Modify these files to customize:
 
@@ -193,12 +193,12 @@ model:
 
 ---
 
-## 🔍 Troubleshooting
+## Troubleshooting
 
 ### Issue: Module not found error
 ```bash
 # Solution: Reinstall the package in editable mode
-pip install -e .
+uv sync
 ```
 
 ### Issue: CUDA not available
@@ -215,7 +215,7 @@ pip install torch --index-url https://download.pytorch.org/whl/cpu
 
 ---
 
-## 📊 Expected Results
+## Expected Results
 
 After running the complete pipeline, you should see:
 
@@ -225,7 +225,7 @@ After running the complete pipeline, you should see:
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! To contribute:
 
@@ -237,13 +237,13 @@ Contributions are welcome! To contribute:
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 👨‍💻 Author
+## Author
 
 **Himmat Magar**
 - GitHub: [@HimmatMagar](https://github.com/HimmatMagar)
@@ -251,7 +251,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 🎓 References & Resources
+## References & Resources
 
 - [PyTorch Documentation](https://pytorch.org/docs/stable/index.html)
 - [Torchvision Models](https://pytorch.org/vision/stable/models.html)
@@ -260,7 +260,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 📝 Notes
+## Notes
 
 - First run may take longer due to dataset downloading
 - GPU usage is optional but significantly speeds up training
@@ -268,4 +268,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Check logs in the console or log files for debugging information
 
 ---
-**Happy Waste Classifying! ♻️**
+**Happy Waste Classifying!**
