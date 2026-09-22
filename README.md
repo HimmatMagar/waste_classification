@@ -34,12 +34,6 @@ cd waste_classification
 pip install uv
 
 # Install dependencies
-uv pip install -e .
-```
-
-#### Option B: Using `pip` with Virtual Environment
-```bash
-# Create a virtual environment and install dependencies
 uv sync
 
 # Activate virtual environment
@@ -94,7 +88,7 @@ waste_classification/
 ### Option 1: Run the Complete Pipeline (Recommended)
 
 ```bash
-python main.py
+uv run main.py
 ```
 
 This will execute the model evaluation pipeline by default. To enable other stages, uncomment the relevant sections in `main.py`:
