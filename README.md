@@ -49,7 +49,6 @@ venv\Scripts\activate
 python -c "import torch; print('PyTorch version:', torch.__version__)"
 python -c "from src.wasteClassification import logger; print('Package installed successfully!')"
 ```
-
 ---
 
 ## Project Structure
@@ -92,61 +91,6 @@ uv run main.py
 ```
 
 This will execute the model evaluation pipeline by default. To enable other stages, uncomment the relevant sections in `main.py`:
-
-```python
-
-STAGE_NAME = "Data Ingestion Stage"
-try:
-  logger.info(f">>>>>> {STAGE_NAME} started <<<<<<")
-  obj = DataIngestionPipeline()
-  obj.main()
-  logger.info(f">>>>>> {STAGE_NAME} completed <<<<<<")
-except Exception as e:
-  logger.exception(e)
-  raise e
-
-stage_name = "Model Training Stage"
-try:
-  logger.info(f">>>>>> {stage_name} started <<<<<<")
-  obj = ModelTrainingPipeline()
-  obj.Train_Model()
-  logger.info(f">>>>>> {stage_name} completed <<<<<<")
-except Exception as e:
-  logger.exception(e)
-  raise e
-```
-
-### Option 2: Run Individual Stages
-
-#### Data Ingestion
-```python
-from src.wasteClassification.pipeline.data_ingestion_pipeline import DataIngestionPipeline
-pipeline = DataIngestionPipeline()
-pipeline.main()
-```
-
-#### Model Training
-```python
-from src.wasteClassification.pipeline.model_training_pipeline import ModelTrainingPipeline
-pipeline = ModelTrainingPipeline()
-pipeline.Train_Model()
-```
-
-#### Model Evaluation
-```python
-from src.wasteClassification.pipeline.model_eval_pipeline import ModelEvalPipeline
-pipeline = ModelEvalPipeline()
-pipeline.main()
-```
-
-### Option 3: Use Jupyter Notebooks
-
-Explore the project interactively:
-
-```bash
-jupyter notebook
-# Navigate to the notebook/ directory
-```
 
 ---
 
